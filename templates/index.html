@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page landing-page {% if not active_page %}active{% endif %}" id="landing">
+        <div class="container">
+            <div class="landing-hero">
+                <h1>Urban Civics</h1>
+                <p>Empowering Citizens Through Transparent Civic Complaint Management</p>
+                <p style="font-size: 16px; margin-bottom: 50px; color: var(--text-secondary);">
+                    Transform how cities handle civic complaints with real-time tracking, citizen verification, and accountability
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Real-time Tracking</h3>
+                    <p>Monitor your complaints from submission to resolution with live status updates</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Citizen Verification</h3>
+                    <p>Verify if issues are truly resolved before authorities mark them complete</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Data Analytics</h3>
+                    <p>Visual dashboards showing complaint trends and municipal performance metrics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Accountability</h3>
+                    <p>Escalation system ensures every complaint gets proper attention and resolution</p>
+                </div>
+            </div>
+
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="showPage('login')">Login as Citizen</button>
+                <button class="btn btn-secondary" onclick="showPage('admin-login')">Login as Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="page login-page" id="login">
+        <div class="auth-container">
+            <h2>Welcome Back</h2>
+            <p>Login to your Urban Civics account</p>
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div class="form-toggle">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe" style="margin: 0;">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <div class="auth-links">
+                Don't have an account? <a href="#" onclick="showPage('signup'); return false;">Sign up here</a>
+            </div>
+            <p class="auth-links">
+            <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+                 </p>
+            <button class="btn btn-back" style="width: 100%; margin-top: 16px;" onclick="showPage('landing')">← Back to Home</button>
+
+        </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div class="page signup-page" id="signup">
+        <div class="auth-container">
+            <h2>Create Account</h2>
+            <p>Join Urban Civics and make your voice heard</p>
+            <form method="POST" action="/register">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+            <div class="auth-links">
+                Already have an account? <a href="#" onclick="showPage('login'); return false;">Login here</a>
+            </div>
+            <button class="btn btn-back" style="width: 100%; margin-top: 16px;" onclick="showPage('landing')">← Back to Home</button>
+        </div>
+    </div>
+        <!-- Admin Login Page -->
+    <div class="page admin-login-page" id="admin-login">
+        <div class="auth-container">
+            <h2>Admin Login</h2>
+            <p>Login to Urban Civics Admin Dashboard</p>
+            <form method="POST" action="/admin_login">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" name="email" placeholder="admin@municipality.gov" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div class="form-toggle">
+                    <input type="checkbox" id="rememberAdmin">
+                    <label for="rememberAdmin" style="margin: 0;">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <div class="auth-links">
+                <a href="#" onclick="showPage('landing'); return false;">Back to Home</a>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

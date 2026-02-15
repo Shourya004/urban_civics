@@ -1,0 +1,124 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+        <!-- Manage Complaints -->
+        <div class="page active" id="manage-complaints">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Manage Complaints</h1>
+                    <p>Review and update complaint status</p>
+                </div>
+
+                <div class="admin-section">
+                    <form method="GET" action="{{ url_for('admin_complaints') }}">
+                        <div class="section-controls">
+                            <input type="text"
+                                   name="search"
+                                   value="{{ search }}"
+                                   placeholder="Search complaints..."
+                                   class="search-input">
+
+                            <select name="status" class="filter-select">
+                                <option value="All">All Status</option>
+                                <option value="Pending" {% if status_filter=='Pending' %}selected{% endif %}>Pending</option>
+                                <option value="In Progress" {% if status_filter=='In Progress' %}selected{% endif %}>In Progress</option>
+                                <option value="Resolved" {% if status_filter=='Resolved' %}selected{% endif %}>Resolved</option>
+                            </select>
+
+                            <button type="submit" class="btn-primary">Apply</button>
+                        </div>
+                    </form>
+
+                    <div class="complaints-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in complaints.items %}
+                                <tr>
+                                    <td>#{{ complaint.id }}</td>
+                                    <td>{{ complaint.title.title() }}</td>
+                                    <td>{{ complaint.category.title() }}</td>
+                                    <td><span class="status-badge {% if complaint.status == 'Pending' %}pending{% elif complaint.status == 'In Progress' %}
+                                                                                  progress
+                                                                                {% elif complaint.status == 'Resolved' %}
+                                                                                                resolved{% endif %}">{{ complaint.status.title() }}</span></td>
+                                    <td>{{ complaint.date_created.strftime('%b %d, %Y') }}</td>
+                                    <td>
+                                        <button class="btn-sm btn-edit" onclick="openEditModal({{ complaint.id }},'{{ complaint.title }}',
+                                                          '{{ complaint.category }}','{{ complaint.description }}','{{ complaint.image }}',
+                                                               '{{ complaint.status }}')">Edit</button>
+                                        {% if complaint.status != "Resolved" %}
+                                        <a href="{{ url_for('resolve_complaint', id=complaint.id, page=request.args.get('page',1)) }}">
+                                            <button class="btn-sm btn-resolve">Resolve</button>
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if complaints.has_prev %}
+                    <a href="{{ url_for('admin_complaints',
+                                         page=complaints.prev_num,
+                                         search=search,
+                                         status=status_filter) }}">
+                        <button class="btn-sm">« Previous</button>
+                    </a>
+                    {% endif %}
+
+                    {% for p in range(1, complaints.pages + 1) %}
+                    <a href="{{ url_for('admin_complaints',
+                                         page=p,
+                                         search=search,
+                                         status=status_filter) }}">
+                        <button class="btn-sm {% if p == complaints.page %}btn-edit{% endif %}">
+                            {{ p }}
+                        </button>
+                    </a>
+                    {% endfor %}
+
+                    {% if complaints.has_next %}
+                    <a href="{{ url_for('admin_complaints',
+                                         page=complaints.next_num,
+                                         search=search,
+                                         status=status_filter) }}">
+                        <button class="btn-sm">Next »</button>
+                    </a>
+                    {% endif %}
+                    </div>
+                    <div class="modal" id="editModal" style="display:none;">
+                    <div class="modal-content">
+                        <h3>Complaint Details</h3>
+
+                        <p><strong>Title:</strong> <span id="modalTitle"></span></p>
+                        <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                        <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+
+                        <img id="modalImage" style="max-width:100%; margin:10px 0;">
+
+                        <select id="modalStatus" class="filter-select">
+                            <option>Pending</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                        </select>
+
+                        <input type="hidden" id="modalComplaintId">
+
+                        <button class="btn-primary" onclick="updateStatus()">Update</button>
+                        <button class="btn-sm" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

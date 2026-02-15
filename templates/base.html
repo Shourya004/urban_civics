@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Civics - Smart City Complaint Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"></head>
+<body class = "{% if session.get('user_id') %}dashboard-page{% else %}on-landing{% endif %}">
+    <!-- Header -->
+    <header>
+
+        <div class="header-content container">
+            <a href="/" class="logo" >Urban Civics</a>
+            <div class="header-actions">
+                <button class="icon-button" id="darkModeToggle" title="Toggle dark mode">🌓</button>
+                <button class="hamburger" id="hamburgerBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+        {% if session.get('user_id') %}
+        <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li class="sidebar-item" data-page="dashboard">
+                <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+            </li>
+            <li class="sidebar-item" data-page="report">
+                <a href="{{ url_for('report') }}">📝 Report Issue</a>
+            </li>
+            <li class="sidebar-item" data-page="my-complaints">
+                <a href="{{ url_for('my_complain') }}">📋 My Complaints</a>
+            </li>
+            <li class="sidebar-item" data-page="analytics">
+                <a href="{{ url_for('analytics') }}">📈 Analytics</a>
+            </li>
+            <li class="sidebar-item" data-page="profile">
+                <a href="{{ url_for('profile') }}">👤 Profile</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" onclick="logout(); return false;">🚪 Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    {% endif %}
+
+    <div style="position: fixed; top: 80px; right: 20px; z-index: 9999; width: 320px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="
+                        padding: 12px;
+                        margin-bottom: 10px;
+                        border-radius: 6px;
+                        color: white;
+                        background-color:
+                            {% if category == 'success' %}#22c55e
+                            {% elif category == 'danger' %}#ef4444
+                            {% elif category == 'warning' %}#f59e0b
+                            {% else %}#0ea5e9
+                            {% endif %};
+                    ">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% block content %}{% endblock %}
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% if request.args.get('alert') %}
+<script>
+    window.alert({{ request.args.get('alert') | tojson }});
+</script>
+{% endif %}
+</body>
+</html>

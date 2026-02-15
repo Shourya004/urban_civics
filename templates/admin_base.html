@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Civics Admin - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content container">
+            <a href="{{ url_for('admin_dashboard') }}" class="logo">Urban Civics Admin</a>
+            <div class="header-actions">
+                <button class="icon-button" id="darkModeToggle" title="Toggle dark mode">🌓</button>
+                <button class="hamburger" id="hamburgerBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li class="sidebar-item" data-page="admin-dashboard">
+                <a href="{{ url_for('admin_dashboard') }}">📊 Admin Dashboard</a>
+            </li>
+            <li class="sidebar-item" data-page="manage-complaints">
+                <a href="{{ url_for('admin_complaints') }}">📋 Manage Complaints</a>
+            </li>
+            <li class="sidebar-item" data-page="admin-analytics">
+                <a href="{{ url_for('admin_analytics') }}">📈 Analytics</a>
+            </li>
+            <li class="sidebar-item" data-page="admin-reports">
+                <a href="{{ url_for('admin_reports') }}">📄 Reports</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="/">🚪 Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    <div style="position: fixed; top: 80px; right: 20px; z-index: 9999; width: 320px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="
+                        padding: 12px;
+                        margin-bottom: 10px;
+                        border-radius: 6px;
+                        color: white;
+                        background-color:
+                            {% if category == 'success' %}#22c55e
+                            {% elif category == 'danger' %}#ef4444
+                            {% elif category == 'warning' %}#f59e0b
+                            {% else %}#0ea5e9
+                            {% endif %};
+                    ">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div class="pages-container">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="{{ url_for('static', filename='js/admin-script.js') }}"></script>
+</body>
+</html>

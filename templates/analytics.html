@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <div class="page analytics-page active" id="analytics">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Analytics & Insights</h2>
+                <p>Detailed complaint trends and municipal performance</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h4>Complaints by Status</h4>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h4>Complaints by Category</h4>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+<!--                <div class="chart-card">-->
+<!--                    <h4>Resolution Timeline</h4>-->
+<!--                    <div class="chart-container">-->
+<!--                        <canvas id="timelineChart"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="chart-card">
+                    <h4>Weekly Complaints</h4>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+
+<!--                <div class="chart-card">-->
+<!--                    <h4>Category Distribution (Radar)</h4>-->
+<!--                    <div class="chart-container">-->
+<!--                        <canvas id="radarChart"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="chart-card">-->
+<!--                    <h4>Performance by Area</h4>-->
+<!--                    <div class="chart-container">-->
+<!--                        <canvas id="areaChart"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const statusLabels = {{ status_data | map(attribute=0) | list | tojson }};
+const statusCounts = {{ status_data | map(attribute=1) | list | tojson }};
+
+const categoryLabels = {{ category_data | map(attribute=0) | list | tojson }};
+const categoryCounts = {{ category_data | map(attribute=1) | list | tojson }};
+
+const weeklyLabels = {{ weekly_data | map(attribute=0) | list | tojson }};
+const weeklyCounts = {{ weekly_data | map(attribute=1) | list | tojson }};
+
+
+// STATUS CHART
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: statusLabels,
+        datasets: [{
+            data: statusCounts,
+            backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+        }]
+    }
+});
+
+
+// CATEGORY CHART
+new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: categoryLabels,
+        datasets: [{
+            label: "Complaints",
+            data: categoryCounts,
+            backgroundColor: '#007bff'
+        }]
+    }
+});
+
+
+// WEEKLY CHART
+new Chart(document.getElementById('weeklyChart'), {
+    type: 'line',
+    data: {
+        labels: weeklyLabels,
+        datasets: [{
+            label: "Weekly Complaints",
+            data: weeklyCounts,
+            borderColor: '#28a745',
+            fill: false
+        }]
+    }
+});
+</script>
+{% endblock %}

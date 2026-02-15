@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page my-complaints-page active" id="my-complaints">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>My Complaints</h2>
+                <p>Track all your submitted complaints</p>
+            </div>
+
+            <div class="complaints-section">
+                <div class="section-header">
+                    <h3>All Your Complaints</h3>
+                    <div class="search-filters">
+                        <form method="GET" action="{{ url_for('my_complain') }}">
+                            <select name="status"
+                                    class="filter-select"
+                                    style="min-width: 150px;"
+                                    onchange="this.form.submit()">
+
+                                <option value="">All Statuses</option>
+
+                                <option value="Pending"
+                                    {% if selected_status == 'Pending' %}selected{% endif %}>
+                                    Pending
+                                </option>
+
+                                <option value="In Progress"
+                                    {% if selected_status == 'In Progress' %}selected{% endif %}>
+                                    In Progress
+                                </option>
+
+                                <option value="Resolved"
+                                    {% if selected_status == 'Resolved' %}selected{% endif %}>
+                                    Resolved
+                                </option>
+
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div id="myComplaintsList">
+                {% for complain in complaints %}
+
+                    <div class="complaint-item {% if complain.status.lower() == 'pending' %}pending
+            {% elif complain.status.lower() == 'in progress' %}in-progress
+            {% elif complain.status.lower() == 'resolved' %}resolved
+            {% endif %}">
+                        <div class="complaint-content">
+                            <h4>{{ complain.title.title() }}</h4>
+                            <div class="complaint-meta">
+                                <span>📍 {{ complain.address.title() }}</span>
+                                <span>📅 {{ complain.date_created.strftime('%d %b %Y') }}</span>
+                                <span>🆔 #{{ complain.id }}</span>
+                            </div>
+                            <div class="complaint-description">{{ complain.description.title() }}</div>
+                            {% if complain.image %}
+                            <div style="margin-top:10px;">
+                                <img src="{{ url_for('static', filename='uploads/' + complain.image) }}"
+                                         width="200">
+                            </div>
+                            {% endif %}
+                            <div class="complaint-actions">
+                                <button class="btn-small btn-view" onclick="openComplaintModal(
+                                    '{{ complain.title|escape }}',
+                                    '{{ complain.description|escape }}',
+                                    '{{ complain.status }}',
+                                    '{{ complain.date_created.strftime('%d %b %Y') }}',
+                                    '{{ complain.address|escape }}'
+                                )">View Full Details</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge pending {% if complain.status.lower() == 'pending' %}pending
+                    {% elif complain.status.lower() == 'in progress' %}in-progress
+                    {% elif complain.status.lower() == 'resolved' %}resolved
+                    {% endif %}">
+                    {{ complain.status }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="complaintModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-header" id="modalHeader"></div>
+            <div id="modalBody"></div>
+
+            {% for complain in complaints %}
+            {% if complain.status.lower() == "resolved" %}
+
+                {% if not complain.feedback %}
+
+                    <div class="feedback-section">
+                        <h4>Was your issue resolved?</h4>
+
+                        <button class="btn btn-success"
+                                onclick="markSatisfied({{ complain.id }}, '{{ complain.image }}')">
+                            👍 Solved
+                        </button>
+
+                        <button class="btn btn-danger"
+                                onclick="markNotSolved({{ complain.id }}, '{{ complain.image }}')">
+                            ❌ Not Solved
+                        </button>
+                    </div>
+
+                {% elif complain.feedback == "satisfied" %}
+
+                    <div class="resolved-info">
+                        ✅ Marked as resolved on
+                        <strong>{{ complain.date_resolved.strftime('%d %b %Y') }}</strong>
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+            {% endfor %}
+            <div style="margin-top: 30px; display: flex; gap: 12px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

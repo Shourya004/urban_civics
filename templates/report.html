@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page report-page active" id="report">
+        <div class="container" style="max-width: 700px;">
+            <div class="dashboard-header">
+                <h2>Report an Issue</h2>
+                <p>Help us improve your city by reporting civic issues</p>
+            </div>
+
+            <div class="auth-container">
+                <form class="report-form" method="POST" action="/submit-complaint" enctype="multipart/form-data">
+                    <div class="form-section">
+                        <h4>📋 Issue Details</h4>
+                        <div class="form-group">
+                            <label>Issue Title</label>
+                            <input type="text" name="title" placeholder="Brief title of the issue" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" placeholder="Provide detailed description of the issue..." required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>🏷️ Category</h4>
+                        <div class="category-options">
+                            <div class="category-option" onclick="selectCategory(this, 'pothole')">🚗 Pothole</div>
+                            <div class="category-option" onclick="selectCategory(this, 'light')">💡 Streetlight</div>
+                            <div class="category-option" onclick="selectCategory(this, 'garbage')">🗑️ Garbage</div>
+                            <div class="category-option" onclick="selectCategory(this, 'water')">💧 Water</div>
+                            <div class="category-option" onclick="selectCategory(this, 'road')">🛣️ Road</div>
+                            <div class="category-option" onclick="selectCategory(this, 'other')">📌 Other</div>
+                        </div>
+                        <input type="hidden" id="selectedCategory" name="category" value="">
+                    </div>
+
+                    <div class="form-section">
+                        <h4>📍 Location</h4>
+                        <div class="location-picker">
+                            <input type="text" name="address" id="address" placeholder="Enter address or intersection" required>
+                            <button type="button" class="btn-map" onclick="openMap()">🗺️ Map</button>
+                            <input type="hidden" name="latitude" id="latitude">
+                            <input type="hidden" name="longitude" id="longitude">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>📸 Attachments</h4>
+                        <div class="form-group">
+                            <label>Upload Image (Optional)</label>
+                            <input type="file" name="image">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Submit Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<div class="modal" id="mapModal">
+    <div class="modal-content" style="width: 90%; max-width: 800px;">
+        <button class="modal-close" onclick="closeMap()">✕</button>
+        <h3>Select Location</h3>
+        <div id="map" style="height: 400px; margin-top: 10px;"></div>
+        <button class="btn btn-primary" style="margin-top: 15px;" onclick="closeMap()">Done</button>
+    </div>
+</div>
+
+
+{% endblock %}

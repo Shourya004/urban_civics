@@ -1,0 +1,54 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+        <!-- Admin Reports -->
+        <div class="page active" id="admin-reports">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Reports</h1>
+                    <p>Generate and download detailed reports</p>
+                </div>
+
+                <div class="admin-section">
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <div class="report-icon">📊</div>
+                            <h3>Monthly Summary Report</h3>
+                            <p>Comprehensive monthly performance metrics and statistics</p>
+                            <a href="{{ url_for('monthly_report') }}">
+                                <button class="btn-primary">Generate Report</button>
+                            </a>
+
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">📈</div>
+                            <h3>Performance Metrics</h3>
+                            <p>Detailed performance data and trend analysis</p>
+                            <a href="{{ url_for('performance_report') }}">
+                                <button class="btn-primary">Generate Report</button>
+                            </a>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">👥</div>
+                            <h3>User Statistics</h3>
+                            <p>User demographics and activity patterns</p>
+                            <a href="{{ url_for('user_report') }}">
+                                <button class="btn-primary">Generate Report</button>
+                            </a>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-icon">🎯</div>
+                            <h3>Category Analysis</h3>
+                            <p>Analysis of complaint categories and trends</p>
+                            <a href="{{ url_for('category_report') }}">
+                                <button class="btn-primary">Generate Report</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="page dashboard-page active" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Dashboard</h2>
+                <p>Welcome back {{ session.name }} ! Here's your complaint overview</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Complaints</div>
+                    <div class="stat-value">{{ total_complaints }}</div>
+<!--                    <div class="stat-change">↑ 3 this month</div>-->
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Resolved</div>
+                    <div class="stat-value" style="color: var(--success);">{{ resolved }}</div>
+<!--                    <div class="stat-change">✓ 75% resolution rate</div>-->
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-value" style="color: var(--warning);">{{ in_progress }}</div>
+<!--                    <div class="stat-change">Average wait: 5 days</div>-->
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value" style="color: var(--pending);">{{ pending }}</div>
+<!--                    <div class="stat-change">Awaiting review</div>-->
+                </div>
+            </div>
+
+            <div class="complaints-section">
+                <div class="section-header">
+                    <h3>Recent Complaints</h3>
+                    <div class="search-filters">
+                        <a href="{{ url_for('export_csv') }}"><button  class="btn-export">📥 Export CSV</button></a>
+                    </div>
+                </div>
+               <div id="complaintsList">
+    {% for complain in complaints %}
+        <div class="complaint-item
+            {% if complain.status.lower() == 'pending' %}pending
+            {% elif complain.status.lower() == 'in progress' %}in-progress
+            {% elif complain.status.lower() == 'resolved' %}resolved
+            {% endif %}">
+
+            <div class="complaint-content">
+                <h4>{{ complain.title.title() }}</h4>
+
+                <div class="complaint-meta">
+                    <span>📍 {{ complain.address.title() }}</span>
+                    <span>📅 {{ complain.date_created.strftime('%d %b %Y') }}</span>
+                    <span>🆔 #{{ complain.id }}</span>
+                </div>
+
+                <div class="complaint-description">
+                    {{ complain.description.title() }}
+                </div>
+
+                {% if complain.image %}
+                    <div style="margin-top:10px;">
+                        <img src="{{ url_for('static', filename='uploads/' + complain.image) }}"
+                             width="200">
+                    </div>
+                {% endif %}
+
+                <div class="complaint-actions">
+                    <button class="btn-small btn-view" onclick="openComplaintModal(
+        '{{ complain.title|escape }}',
+        '{{ complain.description|escape }}',
+        '{{ complain.status }}',
+        '{{ complain.date_created.strftime('%d %b %Y') }}',
+        '{{ complain.address|escape }}'
+    )">
+                        View Details
+                    </button>
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <span class="status-badge
+                    {% if complain.status.lower() == 'pending' %}pending
+                    {% elif complain.status.lower() == 'in progress' %}in-progress
+                    {% elif complain.status.lower() == 'resolved' %}resolved
+                    {% endif %}">
+                    {{ complain.status }}
+                </span>
+            </div>
+
+        </div>
+    {% endfor %}
+    </div>
+    <div class="modal" id="complaintModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-header" id="modalHeader"></div>
+            <div id="modalBody"></div>
+            <div style="margin-top: 30px; display: flex; gap: 12px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

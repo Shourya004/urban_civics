@@ -1,0 +1,96 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+        <!-- Admin Analytics -->
+        <div class="page active" id="admin-analytics">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Analytics & Insights</h1>
+                    <p>Detailed analytics and performance metrics</p>
+                </div>
+
+                <div class="admin-section">
+                    <div class="analytics-grid">
+                        <div class="chart-box">
+                            <h3>Complaints Over Time</h3>
+                            <canvas id="complaintsTimeChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <h3>Category Distribution</h3>
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <h3>Resolution Time</h3>
+                            <canvas id="resolutionTimeChart"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <h3>User Activity</h3>
+                            <canvas id="userActivityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+const months = {{ months|tojson }};
+const monthlyCounts = {{ monthly_counts|tojson }};
+const categories = {{ categories|tojson }};
+const categoryCounts = {{ category_counts|tojson }};
+const users = {{ users|tojson }};
+const userCounts = {{ user_counts|tojson }};
+const avgResolution = {{ avg_resolution }};
+</script>
+<script>
+
+// 1️⃣ Complaints Over Time
+new Chart(document.getElementById("complaintsTimeChart"), {
+    type: "line",
+    data: {
+        labels: months,
+        datasets: [{
+            label: "Complaints",
+            data: monthlyCounts
+        }]
+    }
+});
+
+
+// 2️⃣ Category Distribution
+new Chart(document.getElementById("categoryChart"), {
+    type: "pie",
+    data: {
+        labels: categories,
+        datasets: [{
+            data: categoryCounts
+        }]
+    }
+});
+
+
+// 3️⃣ Resolution Time
+new Chart(document.getElementById("resolutionTimeChart"), {
+    type: "bar",
+    data: {
+        labels: ["Average Resolution Time (Days)"],
+        datasets: [{
+            data: [avgResolution]
+        }]
+    }
+});
+
+
+// 4️⃣ User Activity
+new Chart(document.getElementById("userActivityChart"), {
+    type: "bar",
+    data: {
+        labels: users,
+        datasets: [{
+            label: "Complaints Filed",
+            data: userCounts
+        }]
+    }
+});
+
+</script>
+{% endblock %}
