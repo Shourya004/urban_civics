@@ -15,8 +15,8 @@ import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-EMAIL_ADDRESS = "shouryaclgiet@gmail.com"
-EMAIL_PASSWORD = "qpib xxzp odga fnka"
+EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 
 def send_email(to_email, subject, body, html=False):
     try:
@@ -131,7 +131,7 @@ def admin_required(f):
 
 UPLOAD_FOLDER = "static/uploads"
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "supersecretkey"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 serializer = URLSafeTimedSerializer(app.secret_key)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -972,4 +972,5 @@ def admin_logout():
 # RUN APP
 # ===============================
 if __name__ == "__main__":
+
     app.run(debug=True)
