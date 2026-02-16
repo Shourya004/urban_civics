@@ -208,7 +208,7 @@ def register():
             email=email,
             phone=phone,
             password=hashed_password,
-            is_verified=TRUE 
+            is_verified=True
         )
 
         db.session.add(user)
@@ -913,6 +913,7 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
 
