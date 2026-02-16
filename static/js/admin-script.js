@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+document.getElementById("hamburgerBtn")?.addEventListener("click", function () {
+    document.getElementById("sidebar").classList.toggle("active");
+    document.getElementById("overlay").classList.toggle("active");
+});
 
 // Toggle dark mode
 document.getElementById("darkModeToggle")?.addEventListener("click", function () {
@@ -114,4 +118,5 @@ setTimeout(() => {
         setTimeout(() => flash.remove(), 500);
     });
 }, 4000);
+
 
