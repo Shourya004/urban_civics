@@ -175,7 +175,8 @@ class Complaint(db.Model):
     date_resolved = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     feedback = db.Column(db.String(50))
-
+with app.app_context():
+    db.create_all()
 # ===============================
 # HOME
 # ===============================
@@ -967,6 +968,7 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
 
