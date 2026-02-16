@@ -208,65 +208,15 @@ def register():
             email=email,
             phone=phone,
             password=hashed_password,
-            is_verified=False
+            is_verified=TRUE 
         )
 
         db.session.add(user)
         db.session.commit()
 
-        # Generate token
-        token = serializer.dumps(email, salt="email-verify")
-
-        verify_link = url_for("verify_email_registration",
-                              token=token,
-                              _external=True)
-        html_content = f"""
-        <h2>Welcome to Urban Civics</h2>
-        <p>Click below to verify your account:</p>
-
-        <a href="{verify_link}"
-           style="background:#0ea5e9;
-                  color:white;
-                  padding:12px 20px;
-                  text-decoration:none;
-                  border-radius:6px;">
-            Verify Email
-        </a>
-
-        <p>This link expires in 1 hour.</p>
-        """
-
-        send_email(
-            email,
-            "Verify Your Urban Civics Account",
-            html_content,
-            html=True
-        )
-
-        return redirect(url_for("home",alert="Verification email sent. Please check your inbox."))
+        return redirect(url_for("home",alert="Email registered successfully."))
 
     return render_template("register.html")
-
-@app.route("/verify-registration/<token>")
-def verify_email_registration(token):
-
-    try:
-        email = serializer.loads(token,
-                                  salt="email-verify",
-                                  max_age=3600)
-    except:
-        flash("Verification link expired or invalid.", "danger")
-        return redirect(url_for("login"))
-
-    user = User.query.filter_by(email=email).first()
-
-    if user:
-        user.is_verified = True
-        db.session.commit()
-
-        flash("Account verified successfully! You can now login.", "success")
-
-    return redirect(url_for("home"))
 
 # ===============================
 # LOGIN
@@ -280,9 +230,6 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user and check_password_hash(user.password, password):
-            if not user.is_verified:
-                flash("Please verify your email before logging in.", "warning")
-                return redirect(url_for("home"))
             session["user_id"] = user.id
             session["role"] = user.role
             session["name"] = user.name
@@ -293,8 +240,7 @@ def login():
             else:
                 return redirect(url_for("dashboard"))
         else:
-            flash("Invalid credentials!")
-            return redirect(url_for("home"))
+            return redirect(url_for("home",alert="Invalid credentials!"))
     return redirect(url_for("home"))
 
 
@@ -320,8 +266,7 @@ def admin_login():
             return redirect(url_for("admin_dashboard"))
 
         else:
-            flash("Invalid credentials", "danger")
-
+            return redirect(url_for("home",alert="Invalid credentials"))
     return redirect(url_for("home"))
 
 
@@ -968,6 +913,7 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
 
