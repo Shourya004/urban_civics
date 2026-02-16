@@ -17,8 +17,7 @@ from email.mime.multipart import MIMEMultipart
 
 EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-print(EMAIL_ADDRESS)
-print(EMAIL_PASSWORD)
+
 def send_email(to_email, subject, body, html=False):
     try:
         msg = MIMEMultipart()
@@ -176,13 +175,6 @@ class Complaint(db.Model):
     date_resolved = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     feedback = db.Column(db.String(50))
-
-
-# ===============================
-# CREATE DATABASE
-# ===============================
-with app.app_context():
-    db.create_all()
 
 # ===============================
 # HOME
@@ -975,5 +967,6 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
