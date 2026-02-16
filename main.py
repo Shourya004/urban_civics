@@ -17,7 +17,8 @@ from email.mime.multipart import MIMEMultipart
 
 EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-
+print(EMAIL_ADDRESS)
+print(EMAIL_PASSWORD)
 def send_email(to_email, subject, body, html=False):
     try:
         msg = MIMEMultipart()
@@ -974,4 +975,5 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
