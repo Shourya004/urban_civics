@@ -15,11 +15,13 @@
             <a href="/" class="logo" >Urban Civics</a>
             <div class="header-actions">
                 <button class="icon-button" id="darkModeToggle" title="Toggle dark mode">🌓</button>
+                {% if session.get('user_id') %}
                 <button class="hamburger" id="hamburgerBtn">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
+                {% endif %}
             </div>
         </div>
     </header>
@@ -84,4 +86,5 @@
 </script>
 {% endif %}
 </body>
+
 </html>
