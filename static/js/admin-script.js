@@ -73,13 +73,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-function openEditModal(id, title, category, description, image, status) {
+function openEditModal(id, title, category, description, image, status, location) {
 
     document.getElementById("modalComplaintId").value = id;
     document.getElementById("modalTitle").innerText = title;
     document.getElementById("modalCategory").innerText = category;
     document.getElementById("modalDescription").innerText = description;
     document.getElementById("modalStatus").value = status;
+    document.getElementById("modalLocation").innerText = location;
 
     if (image) {
         document.getElementById("modalImage").src = "/static/uploads/" + image;
@@ -118,5 +119,6 @@ setTimeout(() => {
         setTimeout(() => flash.remove(), 500);
     });
 }, 4000);
+
 
 
