@@ -56,7 +56,7 @@
                                     <td>
                                         <button class="btn-sm btn-edit" onclick="openEditModal({{ complaint.id }},'{{ complaint.title }}',
                                                           '{{ complaint.category }}','{{ complaint.description }}','{{ complaint.image }}',
-                                                               '{{ complaint.status }}')">Edit</button>
+                                                               '{{ complaint.status }}','{{ complaint.location }}')">Edit</button>
                                         {% if complaint.status != "Resolved" %}
                                         <a href="{{ url_for('resolve_complaint', id=complaint.id, page=request.args.get('page',1)) }}">
                                             <button class="btn-sm btn-resolve">Resolve</button>
@@ -125,3 +125,4 @@
         </div>
 
 {% endblock %}
+
