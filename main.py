@@ -385,8 +385,8 @@ def submit_complaint():
                longitude = longitude
                )
 
-               db.session.add(new_complaint)
-               db.session.commit()
+            db.session.add(new_complaint)
+            db.session.commit()
 
     flash("Complaint submitted successfully!", "success")
     return redirect(url_for("dashboard"))
@@ -916,6 +916,7 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
 
