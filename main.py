@@ -370,20 +370,23 @@ def submit_complaint():
     if file and file.filename != "":
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+    is_location = Complaint.query.get(location)
+    is_type = Complaint.query.get(category)
+    if is_location:
+        if is_type:
+            new_complaint = Complaint(
+               title=title,
+               description=description,
+               address=location,
+               image=filename,
+               user_id=session["user_id"],
+               category=category,
+               latitude = latitude,
+               longitude = longitude
+               )
 
-    new_complaint = Complaint(
-        title=title,
-        description=description,
-        address=location,
-        image=filename,
-        user_id=session["user_id"],
-        category=category,
-        latitude = latitude,
-        longitude = longitude
-    )
-
-    db.session.add(new_complaint)
-    db.session.commit()
+               db.session.add(new_complaint)
+               db.session.commit()
 
     flash("Complaint submitted successfully!", "success")
     return redirect(url_for("dashboard"))
@@ -913,6 +916,7 @@ def admin_logout():
 if __name__ == "__main__":
 
     app.run()
+
 
 
 
